@@ -46,3 +46,27 @@ uint32_t ConvertToHost4Bytes(const uint8_t* buf){
     memcpy(&val, buf, sizeof(val));
     return ntohl(val);
 }
+
+#include <chrono>
+class CTimeMeasurer {
+public:
+    CTimeMeasurer() {
+        start_time = system_clock::now();
+    }
+
+    void start() {
+        start_time = system_clock::now();
+    }
+
+    void stop() {
+        stop_time = system_clock::now();
+
+        auto seconds = std::chrono::duration_cast<std::chrono::seconds>(stop_time-start_time).count();
+        auto m_sec = std::chrono::duration_cast<std::chrono::milliseconds>(stop_time-start_time).count() - seconds*100;
+        cout << "Total elapsed time: " << seconds << "." << m_sec << " sec" << endl;
+    }
+
+private:
+    system_clock::time_point start_time;
+    system_clock::time_point stop_time;
+};
